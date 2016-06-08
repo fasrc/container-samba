@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+#===============================================================================
+#          FILE: samba.sh
+#
+#         USAGE: ./samba.sh
+#
+#   DESCRIPTION: Entrypoint for samba docker container
+#
+#       OPTIONS: ---
+#  REQUIREMENTS: ---
+#          BUGS: ---
+#         NOTES: ---
+#        AUTHOR: David Personette (dperson@gmail.com),
+#  ORGANIZATION:
+#       CREATED: 09/28/2014 12:11
+#      REVISION: 1.0
+#===============================================================================
+
+set -o nounset                              # Treat unset variables as an error
+
+
+
+### timezone: Set the timezone for the container
+# Arguments:
+#   timezone) for example EST5EDT
+# Return: the correct zoneinfo file will be symlinked into place
+timezone() { local timezone="${1:-EST5EDT}"
+    [[ -e /usr/share/zoneinfo/$timezone ]] || {
+        echo "ERROR: invalid timezone specified: $timezone" >&2
+        return
+    }
+
+    if [[ -w /etc/timezone && $(cat /etc/timezone) != $timezone ]]; then
+        timedatectl set-timezone America/New York
+    fi
+}
+
+
+
+### usage: Help
+# Arguments:
+#   none)
+# Return: Help text
+usage() { local RC=${1:-0}
+    echo "Usage: ${0##*/} [-opt] [command]
+Options (fields in '[]' are optional, '<>' are required):
+    -h          This help
+    -n          Start the 'nmbd' daemon to advertise the shares
+    -p          Set ownership and permissions on the shares
+    -s \"<name;/path>[;browsable;readonly;guest;users]\" Configure a share
+                required arg: \"<name>;<comment>;</path>\"
+                <name> is how it's called for clients
+                <path> path to share
+                NOTE: for the default value, just leave blank
+                [browsable] default:'yes' or 'no'
+                [readonly] default:'yes' or 'no'
+                [guest] allowed default:'yes' or 'no'
+                [users] allowed default:'all' or list of allowed users
+                [admins] allowed default:'none' or list of admin users
+    -t \"\"       Configure timezone
+                possible arg: \"[timezone]\" - zoneinfo timezone for container
+
+The 'command' (if provided and valid) will be run instead of samba
+" >&2
+    exit $RC
+}
+
+while getopts ":hi:nps:t:u:w:" opt; do
+    case "$opt" in
+        h) usage ;;
+        n) NMBD="true" ;;
+        p) PERMISSIONS="true" ;;
+        t) timezone "$OPTARG" ;;
+        "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
+        ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[[ "${TZ:-""}" ]] && timezone "$TZ"
+
+if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
+    /usr/bin/net ads join -U"$JOIN_USER"%"$JOIN_PASSWORD"
+    exec "$@"
+elif [[ $# -ge 1 ]]; then
+    echo "ERROR: command not found: $1"
+    exit 13
+elif ps -ef | egrep -v grep | grep -q smbd; then
+    echo "Service already running, please restart container to apply changes"
+else
+    [[ ${NMBD:-""} ]] && ionice -c 3 nmbd -D
+    exec ionice -c 3 smbd -FS </dev/null
+fi
