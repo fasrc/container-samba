@@ -12,9 +12,9 @@ ENV SMB_INCLUDE_CONF /etc/samba/samba_include.conf
 
 COPY ./startup /bin/startup
 
-ONBUILD COPY ./dumb-init /bin/dumb-init
+COPY ./dumb-init /bin/dumb-init
 
 EXPOSE 137 139 445
 
 #WORKDIR /var/samba
-ENTRYPOINT ["/bin/dumb-init", "/bin/bash", "/bin/startup"]
+ENTRYPOINT ["/bin/dumb-init", "/bin/startup"]
