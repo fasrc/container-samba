@@ -1,8 +1,7 @@
-FROM centos:7
+FROM alpine:3.4
 MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 
-# Update system, despite a warning against this: https://docs.docker.com/articles/dockerfile_best-practices/#run
-RUN yum -y update && yum install -y samba samba-winbind && yum clean all
+RUN apk add --no-cache bash samba samba-winbind
 
 # Setup environmental variables
 ENV JOIN_USER root
@@ -17,4 +16,4 @@ COPY ./dumb-init /bin/dumb-init
 EXPOSE 137 139 445
 
 #WORKDIR /var/samba
-ENTRYPOINT ["/bin/dumb-init", "/bin/startup"]
+ENTRYPOINT ["/bin/dumb-init", "/bin/startup", "-j"]
