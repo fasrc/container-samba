@@ -16,4 +16,4 @@ COPY ./dumb-init /bin/dumb-init
 EXPOSE 137 139 445
 
 #WORKDIR /var/samba
-ENTRYPOINT ["/bin/dumb-init", "/bin/startup", "-j"]
+ENTRYPOINT ["/bin/dumb-init", "/bin/startup", "-j", "-w"]

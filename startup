@@ -42,6 +42,13 @@ join() {
     /usr/bin/net ads join -U"$JOIN_USER"%"$JOIN_PASSWORD"
 }
 
+### winbind: run the winbind daemon
+# Arguments:
+# winbind) no args, just run winbind as a daemon
+winbind() {
+   /usr/sbin/winbindd -D
+}
+
 ### usage: Help
 # Arguments:
 #   none)
@@ -71,10 +78,11 @@ The 'command' (if provided and valid) will be run instead of samba
     exit $RC
 }
 
-while getopts ":hi:ji:nps:t:u:w:" opt; do
+while getopts ":hi:ji:wi:nps:t:u:w:" opt; do
     case "$opt" in
         h) usage ;;
         j) join ;;
+        w) winbind ;;
         n) NMBD="true" ;;
         p) PERMISSIONS="true" ;;
         t) timezone "$OPTARG" ;;
