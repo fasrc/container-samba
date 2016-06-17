@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 
-RUN apk add --no-cache bash samba samba-winbind samba-winbind-clients samba-libnss-winbind tdb linux-pam && rm -rf /var/cache/apk/*
+RUN apk add --no-cache bash samba samba-winbind samba-winbind-clients samba-libnss-winbind tdb linux-pam nss-pam-ldapd && rm -rf /var/cache/apk/*
 
 # Setup environmental variables
 ENV JOIN_USER root
