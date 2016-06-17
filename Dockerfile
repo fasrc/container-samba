@@ -6,6 +6,7 @@ RUN apk add --no-cache bash samba samba-winbind samba-winbind-clients samba-libn
 # Setup environmental variables
 ENV JOIN_USER root
 ENV JOIN_PASSWORD root
+ENV DOMAIN DEFAULT
 ENV SMB_CONF /etc/samba/smb.conf
 ENV SMB_INCLUDE_CONF /etc/samba/samba_include.conf
 
