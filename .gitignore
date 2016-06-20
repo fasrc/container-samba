@@ -1,2 +1,4 @@
 smb.conf
 samba_include.conf
+krb5.conf
+samba
