@@ -51,6 +51,12 @@ winbind() {
    /usr/sbin/winbindd -D -dl 5
 }
 
+### nmbd: run the nmbd daemon
+# Arguments:
+# nmbd) no args, just run nmbd as a daemon
+nmbd() {
+   /usr/sbin/nmbd -D -dl 5
+}
 ### usage: Help
 # Arguments:
 #   none)
@@ -85,7 +91,7 @@ while getopts ":hi:ji:wi:nps:t:u:w:" opt; do
         h) usage ;;
         j) join ;;
         w) winbind ;;
-        n) NMBD="true" ;;
+        n) nmbd ;;
         p) PERMISSIONS="true" ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
