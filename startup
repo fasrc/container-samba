@@ -35,8 +35,28 @@ timezone() { local timezone="${1:-EST5EDT}"
     fi
 }
 
+### join: Join the container to active directory
+# Arguments:
+#   join) run the net ads join command
+join() {
+    /usr/bin/net ads keytab create -U"$JOIN_USER"%"$JOIN_PASSWORD"
+    /bin/echo -n $JOIN_PASSWORD | /usr/bin/kinit $JOIN_USER@$DOMAIN
+    /usr/bin/net ads join -U"$JOIN_USER"%"$JOIN_PASSWORD"
+}
 
+### winbind: run the winbind daemon
+# Arguments:
+# winbind) no args, just run winbind as a daemon
+winbind() {
+   /usr/sbin/winbindd -D -dl 5
+}
 
+### nmbd: run the nmbd daemon
+# Arguments:
+# nmbd) no args, just run nmbd as a daemon
+nmbd() {
+   /usr/sbin/nmbd -D -dl 5
+}
 ### usage: Help
 # Arguments:
 #   none)
@@ -45,6 +65,7 @@ usage() { local RC=${1:-0}
     echo "Usage: ${0##*/} [-opt] [command]
 Options (fields in '[]' are optional, '<>' are required):
     -h          This help
+    -j          Join the container to active directory
     -n          Start the 'nmbd' daemon to advertise the shares
     -p          Set ownership and permissions on the shares
     -s \"<name;/path>[;browsable;readonly;guest;users]\" Configure a share
@@ -65,10 +86,12 @@ The 'command' (if provided and valid) will be run instead of samba
     exit $RC
 }
 
-while getopts ":hi:nps:t:u:w:" opt; do
+while getopts ":hi:ji:wi:nps:t:u:w:" opt; do
     case "$opt" in
         h) usage ;;
-        n) NMBD="true" ;;
+        j) join ;;
+        w) winbind ;;
+        n) nmbd ;;
         p) PERMISSIONS="true" ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
@@ -80,7 +103,6 @@ shift $(( OPTIND - 1 ))
 [[ "${TZ:-""}" ]] && timezone "$TZ"
 
 if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
-    /usr/bin/net ads join -U"$JOIN_USER"%"$JOIN_PASSWORD"
     exec "$@"
 elif [[ $# -ge 1 ]]; then
     echo "ERROR: command not found: $1"
