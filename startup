@@ -57,6 +57,15 @@ winbind() {
 nmbd() {
    /usr/sbin/nmbd -D -dl 5
 }
+### sssd: run the sssd daemon
+# Arguments:
+# sssd) no args, just run sssd as a daemon
+sssd() {
+    if [ -f /etc/sysconfig/sssd ]; then
+    . /etc/sysconfig/sssd
+  fi
+    /usr/sbin/sssd -f -D
+}
 ### usage: Help
 # Arguments:
 #   none)
@@ -78,6 +87,7 @@ Options (fields in '[]' are optional, '<>' are required):
                 [guest] allowed default:'yes' or 'no'
                 [users] allowed default:'all' or list of allowed users
                 [admins] allowed default:'none' or list of admin users
+    -S          Start sssd
     -t \"\"       Configure timezone
                 possible arg: \"[timezone]\" - zoneinfo timezone for container
 
@@ -86,13 +96,14 @@ The 'command' (if provided and valid) will be run instead of samba
     exit $RC
 }
 
-while getopts ":hi:ji:wi:nps:t:u:w:" opt; do
+while getopts ":hi:ji::S:wi:nps:t:u:w:" opt; do
     case "$opt" in
         h) usage ;;
         j) join ;;
         w) winbind ;;
         n) nmbd ;;
         p) PERMISSIONS="true" ;;
+        S) sssd ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
