@@ -19,4 +19,4 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 EXPOSE 137 139 445
 
 #WORKDIR /var/samba
-ENTRYPOINT ["/usr/local/bin/dumb-init", "/bin/startup", "-j", "-w", "-n"]
+ENTRYPOINT ["/usr/local/bin/dumb-init", "/bin/startup", "-j", "-w", "-n", "-S"]
