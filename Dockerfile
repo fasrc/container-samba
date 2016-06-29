@@ -2,7 +2,7 @@ FROM centos:7
 MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 
 # Update system, despite a warning against this: https://docs.docker.com/articles/dockerfile_best-practices/#run
-RUN yum -y update && yum install -y samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation wget && \
+RUN yum -y update && yum install -y wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation && \
     rm -rf /var/cache/yum/* /usr/share/doc/* && yum clean all
 
 # Setup environmental variables
@@ -18,7 +18,7 @@ ENV SECURITY ads
 ENV NAME_RESOLVE_ORDER hosts
 ENV LOG_LEVEL 5
 ENV LOG_SIZE 1000
-ENV SOCKET_OPTIONS TCP_NODELAY IPTOS_LOWDELAY SO_SNDBUF=131072 SO_RCVBUF=131072
+ENV SOCKET_OPTIONS 'TCP_NODELAY IPTOS_LOWDELAY SO_SNDBUF=131072 SO_RCVBUF=131072'
 ENV MAX_XMIT 131072
 ENV GETWD_CACHE yes
 ENV NAME_CACHE_TIMEOUT 660
@@ -72,5 +72,4 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 
 EXPOSE 137 139 445
 
-#WORKDIR /var/samba
 ENTRYPOINT ["/usr/local/bin/dumb-init", "/bin/startup", "-j", "-w", "-n", "-S"]
