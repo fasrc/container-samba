@@ -67,7 +67,7 @@ COPY ./startup /bin/startup
 COPY ./smb.conf /etc/samba/smb.conf
 COPY ./smb_include.conf /etc/samba/smb_include.conf
 
-RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.1.1/dumb-init_1.1.1_amd64 && \
+RUN /usr/bin/wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.1.1/dumb-init_1.1.1_amd64 && \
     chmod +x /usr/local/bin/dumb-init
 
 EXPOSE 137 139 445
