@@ -47,14 +47,14 @@ join() {
 # Arguments:
 # winbind) no args, just run winbind as a daemon
 winbind() {
-   /usr/sbin/winbindd -D -dl 5
+   /usr/sbin/winbindd -D
 }
 
 ### nmbd: run the nmbd daemon
 # Arguments:
 # nmbd) no args, just run nmbd as a daemon
 nmbd() {
-   /usr/sbin/nmbd -D -dl 5
+   /usr/sbin/nmbd -D
 }
 ### sssd: run the sssd daemon
 # Arguments:
