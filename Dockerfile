@@ -14,7 +14,7 @@ ENV SMB_INCLUDE_CONF /etc/samba/smb_include.conf
 # samba config default variables
 ENV DOMAIN test
 ENV REALM test.domain
-ENV SECURITY ads
+ENV SECURITY_MODE ADS
 ENV NAME_RESOLVE_ORDER hosts
 ENV LOG_LEVEL 5
 ENV LOG_SIZE 1000
