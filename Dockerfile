@@ -10,6 +10,8 @@ ENV JOIN_USER root
 ENV JOIN_PASSWORD root
 ENV SMB_CONF /etc/samba/smb.conf
 ENV SMB_INCLUDE_CONF /etc/samba/smb_include.conf
+ENV DC dc.domain
+ENV HOSTNAME test_node
 
 # samba config default variables
 ENV DOMAIN 'test'
