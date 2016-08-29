@@ -1,7 +1,8 @@
 FROM centos:7
 MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 
-RUN yum -y update && yum install -y epel-release supervisor wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation deltarpm && \
+RUN yum -y update && yum install -y epel-release wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation deltarpm && \
+    yum install -y supervisor && \
     rm -rf /var/cache/yum/* /usr/share/doc/* && yum clean all
 
 # Setup environmental variables
@@ -76,4 +77,4 @@ COPY ./smb_include.conf /etc/samba/smb_include.conf
 
 EXPOSE 137 139 445
 
-ENTRYPOINT ["/usr/bin/supervisord"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
