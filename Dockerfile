@@ -1,7 +1,7 @@
 FROM centos:7
 MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 
-RUN yum -y update && yum install -y wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd-client pam_krb5 pam_ldap krb5-workstation deltarpm && \
+RUN yum -y update && yum install -y epel-release supervisor wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation deltarpm && \
     rm -rf /var/cache/yum/* /usr/share/doc/* && yum clean all
 
 # Setup environmental variables
@@ -66,13 +66,14 @@ ENV DIRECTORY_MASK '0770'
 ENV MAX_CONNECTIONS 100
 ENV GUEST_OK no
 
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./startup /bin/startup
 COPY ./smb.conf /etc/samba/smb.conf
 COPY ./smb_include.conf /etc/samba/smb_include.conf
 
-RUN /usr/bin/wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.1.1/dumb-init_1.1.1_amd64 && \
-    chmod +x /usr/local/bin/dumb-init
+#RUN /usr/bin/wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.1.1/dumb-init_1.1.1_amd64 && \
+#    chmod +x /usr/local/bin/dumb-init
 
 EXPOSE 137 139 445
 
-ENTRYPOINT ["/usr/local/bin/dumb-init", "/bin/startup", "-j", "-w", "-n", "-S"]
+ENTRYPOINT ["/usr/bin/supervisord"]
