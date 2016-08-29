@@ -3,6 +3,7 @@ MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 
 RUN yum -y update && yum install -y epel-release wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation deltarpm && \
     yum install -y supervisor && \
+    mkdir -p /usr/local/sbin && \
     rm -rf /var/cache/yum/* /usr/share/doc/* && yum clean all
 
 # Setup environmental variables
@@ -69,6 +70,7 @@ ENV GUEST_OK no
 
 COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./startup /bin/startup
+COPY ./join.sh /usr/local/sbin/join
 COPY ./smb.conf /etc/samba/smb.conf
 COPY ./smb_include.conf /etc/samba/smb_include.conf
 
