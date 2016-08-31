@@ -39,7 +39,7 @@ timezone() { local timezone="${1:-EST5EDT}"
 # Arguments:
 #   join) run the net ads join command
 join() {
-    #/usr/bin/net ads keytab create -U"$JOIN_USER"%"$JOIN_PASSWORD"
+    /usr/bin/net ads keytab create -U"$JOIN_USER"%"$JOIN_PASSWORD"
     /usr/bin/net ads join -U"$JOIN_USER"%"$JOIN_PASSWORD" -n "$HOSTNAME" -S "$DC"
 }
 
