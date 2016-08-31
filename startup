@@ -47,7 +47,7 @@ join() {
 # Arguments:
 # winbind) no args, just run winbind as a daemon
 winbind() {
-   /usr/sbin/winbindd -D
+   /usr/sbin/winbindd -D -d 9
 }
 
 ### nmbd: run the nmbd daemon
