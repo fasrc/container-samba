@@ -1,3 +1,8 @@
 smb.conf.*
+sssd.conf
+smb_include.conf
 samba_include.conf
+krb*
 README_internal.md
+example.mdown
+
