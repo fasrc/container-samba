@@ -79,4 +79,4 @@ COPY ./smb_include.conf /etc/samba/smb_include.conf
 
 EXPOSE 137 139 445
 
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
