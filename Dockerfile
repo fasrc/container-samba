@@ -68,7 +68,7 @@ ENV DIRECTORY_MASK '0770'
 ENV MAX_CONNECTIONS 100
 ENV GUEST_OK no
 
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./supervisord.conf /etc/supervisor/supervisord.conf
 COPY ./startup /bin/startup
 COPY ./join.sh /usr/local/sbin/join
 COPY ./smb.conf /etc/samba/smb.conf
