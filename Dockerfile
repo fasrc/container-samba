@@ -4,7 +4,7 @@ MAINTAINER FAS Research Computing <rchelp@rc.fas.harvard.edu>
 RUN yum -y update && yum install -y epel-release wget samba samba-winbind samba-winbind-clients samba-winbind-modules sssd pam_krb5 pam_ldap krb5-workstation deltarpm && \
     yum install -y supervisor && \
     mkdir -p /usr/local/sbin && \
-    rm -rf /var/cache/yum/* /usr/share/doc/* && yum clean all
+    rm -rf /var/cache/yum/* /usr/share/doc/* /etc/supervisord.conf && yum clean all
 
 # Setup environmental variables
 ENV JOIN_USER root
